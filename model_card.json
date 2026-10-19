@@ -1,0 +1,21 @@
+{
+  "demand": {
+    "type": "average of HistGradientBoostingRegressor and LSTM",
+    "trained_on": "2019, 2021-2025 (2020 excluded, COVID)",
+    "inputs": "target-hour weather forecast (GHI, temperature, wind 10/80/100 m) + calendar + demand lags 24/48/168 h + 7-day same-hour mean; LSTM: past 168 h ending 24 h before target",
+    "files": [
+      "demand_gbm.joblib",
+      "demand_lstm.pt"
+    ]
+  },
+  "renewable": {
+    "type": "HistGradientBoostingRegressor",
+    "trained_on": "ECMWF day-ahead forecast weather, Feb 2024 - Dec 2025",
+    "inputs": "target-hour forecast GHI, DNI, DHI, temperature, cloud cover, clear-sky index + installed capacity + calendar + output lags",
+    "files": [
+      "renewable_gbm.joblib"
+    ]
+  },
+  "weather_inputs_in_production": "ECMWF IFS 0.25 deg day-ahead forecast (Open-Meteo previous-runs API, ecmwf_ifs025, *_previous_day1), point 38.4167 N, -113.0167 E",
+  "metrics_file": "final_metrics.csv"
+}
