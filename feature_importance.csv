@@ -1,0 +1,25 @@
+model,input,added_error_mwh,normal_mae_mwh
+Demand,Same hour 24 hours earlier,382.3,218.5
+Demand,Forecast temperature,217.1,218.5
+Demand,"7-day average, same hour",84.1,218.5
+Demand,Weekend or weekday,30.3,218.5
+Demand,Time of year,15.9,218.5
+Demand,Hour of day,15.4,218.5
+Demand,Same hour one week earlier,6.5,218.5
+Demand,Forecast sunlight (GHI),3.4,218.5
+Demand,Forecast wind,2.2,218.5
+Demand,Same hour 2 days earlier,0.7,218.5
+Renewable output,Forecast sunlight (GHI),108.1,13.3
+Renewable output,Forecast direct sunlight (DNI),17.6,13.3
+Renewable output,Forecast scattered sunlight (DHI),11.2,13.3
+Renewable output,Same hour 24 hours earlier,7.3,13.3
+Renewable output,Time of year,4.7,13.3
+Renewable output,Same hour 2 days earlier,2.2,13.3
+Renewable output,Same hour one week earlier,2.2,13.3
+Renewable output,Clear-sky index,1.9,13.3
+Renewable output,"7-day average, same hour",1.6,13.3
+Renewable output,Forecast temperature,1.0,13.3
+Renewable output,Forecast cloud cover,0.3,13.3
+Renewable output,Hour of day,0.3,13.3
+Renewable output,Installed solar capacity,0.0,13.3
+Renewable output,Weekend or weekday,0.0,13.3

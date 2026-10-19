@@ -101,8 +101,8 @@ with st.sidebar:
 
 P = df[df["period"] == period]
 
-tab_over, tab_explore, tab_miss, tab_solar, tab_whatif, tab_data = st.tabs(
-    ["Overview", "Forecast explorer", "Where PACE misses", "Added solar", "Live what-if model", "Data and method"])
+tab_over, tab_explore, tab_miss, tab_solar, tab_whatif, tab_drivers, tab_data = st.tabs(
+    ["Overview", "Forecast explorer", "Where PACE misses", "Added solar", "Live what-if model", "What drives the forecast", "Data and method"])
 
 # ----------------------------------------------------------------------------- overview
 with tab_over:
@@ -331,6 +331,35 @@ with tab_whatif:
                   f"{fmt((new_d - new_r).max() - (base_d - base_r).max())} MWh", delta_color="off")
         st.caption("Uses the production gradient boosting models (trained through 2025). The LSTM half of the demand blend needs a full "
                    "168-hour weather sequence, so it is left out here; the blend shown elsewhere in the app is slightly more accurate.")
+
+# ----------------------------------------------------------------------------- drivers
+with tab_drivers:
+    st.markdown("Which inputs matter? We scrambled one input column at a time and measured how much worse the forecast got. "
+                "A big jump means the model leans on that input; almost no change means it barely uses it.")
+    imp = pd.read_csv(fpath("feature_importance.csv"))
+    which = st.radio("Model", ["Demand", "Renewable output"], horizontal=True, key="drivers_model")
+    I = imp[imp["model"] == which].sort_values("added_error_mwh")
+    normal = float(I["normal_mae_mwh"].iloc[0])
+    top2 = set(I.nlargest(2, "added_error_mwh")["input"])
+    fig = go.Figure(go.Bar(
+        x=I["added_error_mwh"], y=I["input"], orientation="h",
+        marker_color=[C_MAYA if n in top2 else "#b9b6aa" for n in I["input"]],
+        text=[f"+{v:,.1f}" for v in I["added_error_mwh"]], textposition="outside",
+        hovertemplate="%{y}: +%{x:,.1f} MWh error if scrambled<extra></extra>"))
+    fig.update_layout(height=60 + 34 * len(I), margin=dict(l=10, r=40, t=10, b=10),
+                      xaxis_title=f"Extra error (MWh) when scrambled. Normal error: {normal:,.1f} MWh")
+    st.plotly_chart(fig, width="stretch")
+    if which == "Demand":
+        st.markdown("**Two inputs do most of the work.** Demand at the same hour yesterday sets the starting level, and the "
+                    "forecast temperature says how far tomorrow will move from it, mostly through air conditioning on hot days. "
+                    "That pairing is why Maya catches the summer evenings PACE over-forecasts. Wind, rain, humidity, snow and cloud "
+                    "cover add almost nothing for demand.")
+    else:
+        st.markdown("**Sunlight is everything for renewable output.** The forecast of sunlight reaching the ground (GHI) is by far "
+                    "the strongest input, followed by direct and scattered sunlight. Day-ahead cloud forecasts are the main source "
+                    "of renewable error.")
+    st.caption("Permutation test on the production gradient boosting models, January to early September 2026. The LSTM half of "
+               "the demand blend cannot be scored column by column the same way. Built by compute_importance.py.")
 
 # ----------------------------------------------------------------------------- data and method
 with tab_data:
