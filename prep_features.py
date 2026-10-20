@@ -1,6 +1,10 @@
 """Builds data/scenario_features_2026.csv: the exact day-ahead feature rows the production GBMs use for 2026,
-so the app can rerun the models live with adjusted weather. Run from the master_v2 folder."""
-import numpy as np, pandas as pd, sys
+so the app can rerun the models live with adjusted weather.
+v1.1: also writes the weekday / holiday / school-break flags and the bias-corrected population-weighted forecast
+temperature (fc_pw_temp), built exactly as in training/final_models_v1_1.py.
+Run from training/data:  python ../../prep_features.py ../../scenario_features_2026.csv"""
+import numpy as np, pandas as pd, sys, os
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "training"))
 OUT = sys.argv[1]
 df = pd.read_csv("master_hourly_cleaned_ALL_YEARS_v2.csv")
 df["timestamp_utc"] = pd.to_datetime(df["timestamp_utc"]).dt.tz_localize(None)
@@ -26,6 +30,9 @@ def lags(y, p):
 X = pd.DataFrame(index=ts)
 for c in sorted(set(WX_D + WX_R)): X["fc_"+c] = fc[c]
 for c in CAL: X[c] = df[c]
+from final_models_helpers import calendar_extra, pw_temp_inputs
+X = X.join(calendar_extra(ts))
+_, X["fc_pw_temp"] = pw_temp_inputs(df.index)
 X["Clear-sky GHI (W/m2)"] = cs
 X = pd.concat([X, lags(df["Demand (MWh)"].astype(float), "d_"), lags(df["Site Renewable Output Modeled (MWh)"].astype(float), "r_")], axis=1)
 X = X[(year == 2026) & (ts <= df["Demand (MWh)"].last_valid_index())]

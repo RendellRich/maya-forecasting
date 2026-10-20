@@ -13,7 +13,9 @@ NAMES = {"lag24": "Same hour 24 hours earlier", "lag48": "Same hour 2 days earli
          "roll7": "7-day average, same hour", "Temperature (C)": "Forecast temperature", "GHI (W/m2)": "Forecast sunlight (GHI)",
          "DNI (W/m2)": "Forecast direct sunlight (DNI)", "DHI (W/m2)": "Forecast scattered sunlight (DHI)",
          "Cloud Cover (%)": "Forecast cloud cover", "Clear-sky Index": "Clear-sky index", "is_weekend": "Weekend or weekday",
-         "Installed Solar DC (MW)": "Installed solar capacity"}
+         "Installed Solar DC (MW)": "Installed solar capacity",
+         "pw_temp": "Forecast temperature, Utah-Idaho-Wyoming load centers", "holiday": "Holidays", "bridge": "Holidays",
+         "school_out": "School breaks", "dow": "Weekend or weekday"}
 GROUP = {"hour_sin": "Hour of day", "hour_cos": "Hour of day", "doy_sin": "Time of year", "doy_cos": "Time of year", "month": "Time of year",
          "Wind Speed 10m (m/s)": "Forecast wind", "Wind Speed 80m (m/s)": "Forecast wind", "Wind Speed 100m (m/s)": "Forecast wind"}
 rows = []

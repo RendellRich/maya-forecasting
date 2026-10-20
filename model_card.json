@@ -2,7 +2,8 @@
   "demand": {
     "type": "average of HistGradientBoostingRegressor and LSTM",
     "trained_on": "2019, 2021-2025 (2020 excluded, COVID)",
-    "inputs": "target-hour weather forecast (GHI, temperature, wind 10/80/100 m) + calendar + demand lags 24/48/168 h + 7-day same-hour mean; LSTM: past 168 h ending 24 h before target",
+    "version": "v1.1 (Oct 20, 2026)",
+    "inputs": "target-hour weather forecast (GHI, temperature, wind 10/80/100 m at Milford; population-weighted temperature over 8 PACE load centers, bias-corrected to ERA5) + calendar (hour, season, weekday, holidays, bridge days, Utah school breaks) + demand lags 24/48/168 h + 7-day same-hour mean; LSTM: past 168 h ending 24 h before target",
     "files": [
       "demand_gbm.joblib",
       "demand_lstm.pt"

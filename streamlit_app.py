@@ -279,6 +279,11 @@ with tab_whatif:
                 Z[c] = X[c]
             for c in ["lag24", "lag48", "lag168", "roll7"]:
                 Z[c] = X["d_" + c]
+            for c in ["dow", "holiday", "bridge", "school_out"]:      # v1.1 calendar inputs
+                if c in X:
+                    Z[c] = X[c]
+            if "fc_pw_temp" in X:                                     # v1.1 population-weighted temperature
+                Z["pw_temp"] = X["fc_pw_temp"] + dT * 5 / 9
             return Z[list(g_dem.feature_names_in_)]
 
         def renew_X(X, dT, fact):
